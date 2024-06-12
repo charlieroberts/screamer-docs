@@ -540,13 +540,42 @@ Apply texture preset. Textures include `rainbow`, `stripes`, `dots`, `truchet`, 
 
 ## Variables
 
-- *time*: The time since the environment was loaded, measured in seconds. Example: `sphere(1 + sin(time) * .25)`
-- *mousex*: The x position of the mouse mapped from 0--1. Example: `sphere(mousex)`
-- *mousey*: The y position of the mouse mapped from 0--1. Example: `sphere | mousey * 6`
-- *low*: Low frequency analysis of audio input mapped to 0--1. Example: `sphere(low)`
-- *mid*: Mid frequency analysis of audio input mapped to 0--1. Example: `box(mid)`
-- *high*: High frequency analysis of audio input mapped to 0--1. Example: `box@(high*90, low, 0, mid)`
-- *i*: A special variable only used in loops that equals the current loop iteration number, starting at 0.
+### time 
+The time since the environment was loaded, measured in seconds.
+<!-- tabs:start -->
+### **pulse**
+```clike
+sphere(1 + sin(time*4) * .25)
+```
+<!-- tabs:end -->
+
+### mousex
+The x position of the mouse mapped from 0--1. 
+The time since the environment was loaded, measured in seconds.
+<!-- tabs:start -->
+### **mouse me**
+```clike
+sphere( mousex )
+```
+<!-- tabs:end -->
+
+### mousey
+The y position of the mouse mapped from 0--1. 
+<!-- tabs:start -->
+### **mouse me**
+```clike
+sphere # mousey * 6
+```
+<!-- tabs:end -->
+
+### low
+Low frequency analysis of audio input mapped to 0--1. Example: `sphere(low)`
+### mid
+Mid frequency analysis of audio input mapped to 0--1. Example: `box(mid)`
+### high
+High frequency analysis of audio input mapped to 0--1. Example: `box@(high*90, low, 0, mid)`
+### i 
+A special variable only used in loops that equals the current loop iteration number, starting at 0. See [the section on loop](#loop) for more information.
 
 ## Math
 Note: traditional parenthesis `()` do not currently work in math expressions, as they're currently used by the language to group combinators, geometries, and modifiers together... this is a todo to fix.
@@ -566,6 +595,21 @@ Note: traditional parenthesis `()` do not currently work in math expressions, as
 - *abs*: Gets the absolute value for a number.
 
 ## Misc
-- `[ initialGeometry numberOfIterations modifications ]` Loop. This lets you apply a chain of modifications
-to a geometry multiple times, which is useful to quickly create fractal-like shapes. You can use the special `i` variable in math expressions to represent the current loop iteration number. Example: `[octahedron(.125) 8 >(.25,.1,.05) @(45,cos(i+time/3),0,1) |0]`
+### Loop
+This lets you apply a chain of modifications to a geometry multiple times, which is useful to quickly create fractal-like shapes when used with mirroring / repeating. You can use the special `i` variable in math expressions to represent the current loop iteration number. It takes the form `[geometry numberOfIterations modifiers]`
+
+<!-- tabs:start -->
+
+#### **fold me tight**
+```clike
+[octahedron(.125) 8 >(.25,.1,.05) @@(45,cos(i+time/3),0,1) | ]
+```
+
+#### **rubik's dream**
+```clike
+render = fractal.high
+[octahedron(.1) 4 >.1+i*.125 | @sin(time/8)*20*i^i ||(.0002)] @time*30
+```
+
+<!-- tabs:end -->
 
