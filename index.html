@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
+  <link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css">
+
+<style>
+  .run {
+    position:absolute;
+    top:0;
+    right:0;
+    padding:.5rem;
+    margin:0;
+    z-index:10000
+  }
+
+  .markdown-section {
+    max-width:50rem;
+    margin:0 2rem;
+  }
+
+  #example {
+    position:fixed;
+    top:5rem;
+    left:72rem;
+    width:25rem;
+    height:25rem;
+  }
+
+  #example canvas {
+    width:100%;
+    height:100%;
+  }
+
+  ul a {
+    padding:0 !important;
+    margin:0;
+  }
+
+</style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="example">
+    <canvas></canvas>
+  </div>
+
+  <!-- Docsify v4 -->
+  <script src='https://cdn.jsdelivr.net/gh/charlieroberts/screamer@latest/screamer-lang.min.js'></script>
+  <script src='https://cdn.jsdelivr.net/gh/charlieroberts/marching@main/dist/index.js'></script>
+  <script>
+    function remtopixels(rem) {    
+      return rem * parseFloat(getComputedStyle(document.documentElement).fontSize)
+    }
+
+    const prefix = `camera=(0 0 5) fog = (0 0 0 0) post = () background = (0 0 0 ) render = high`
+    window.$docsify = {
+      name: '',
+      repo: '',
+      plugins: [
+        function( hook, vm ) {
+          hook.doneEach(function () {
+            const targetElms = Array.from(document.querySelectorAll('pre[data-lang]'))
+
+            const template = `<button class="run">Run Code</span></button>`
+            
+            targetElms.forEach( (elm,i) => {
+              const btn = document.createElement( 'button' )
+              btn.setAttribute( 'class', 'run' )
+              btn.onclick = function(e) {
+                const codeElem = e.target.parentElement.querySelector('.docsify-tabs__tab--active').nextElementSibling.querySelector('code')
+                const code = prefix + '\n' + codeElem.textContent
+
+                const dim = remtopixels( 25 )
+                Marching.clear()
+                screamer.run( code, [dim, dim] )
+              }
+              btn.innerText = 'run'
+              elm.parentElement.parentElement.appendChild( btn )
+            })
+            
+          })
+        }
+      ]
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4" ></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/js/docsify-themeable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-tabs@1"></script>
+
+  <script type='module'>
+    import screamer from 'https://cdn.jsdelivr.net/gh/charlieroberts/screamer@main/screamer.min.js'
+    
+    window.onload = function() {
+      window.screamer = screamer.init()
+      const c = document.querySelector('canvas')
+      Marching.init( c )
+      Marching.export( window )
+    }
+     
+   </script>
+  
+
+<!--<script src="https://unpkg.com/docsify-copy-code@2"></script>-->
+</body>
+</html>
