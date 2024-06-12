@@ -53,7 +53,7 @@
 
   <!-- Docsify v4 -->
   <script src='https://cdn.jsdelivr.net/gh/charlieroberts/screamer@latest/screamer-lang.min.js'></script>
-  <script src='https://cdn.jsdelivr.net/gh/charlieroberts/marching@main/dist/index.js'></script>
+  <script src='https://cdn.jsdelivr.net/gh/charlieroberts/marching@main/dist/index.min.js'></script>
   <script>
     function remtopixels(rem) {    
       return rem * parseFloat(getComputedStyle(document.documentElement).fontSize)
@@ -78,7 +78,10 @@
                 const code = prefix + '\n' + codeElem.textContent
 
                 const dim = remtopixels( 25 )
-                Marching.clear()
+
+                // only clear if we've already run at least once
+                if( Marching.render !== null ) Marching.clear()
+
                 screamer.run( code, [dim, dim] )
               }
               btn.innerText = 'run'
