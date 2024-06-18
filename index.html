@@ -9,47 +9,14 @@
 
   <link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
   <link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css">
+  <link rel='stylesheet' href='./main.css'>
 
-<style>
-  .run {
-    position:absolute;
-    top:0;
-    right:0;
-    padding:.5rem;
-    margin:0;
-    z-index:10000
-  }
+<style></style>
 
-  .markdown-section {
-    max-width:50rem;
-    margin:0 2rem;
-  }
-
-  #example {
-    position:fixed;
-    top:5rem;
-    left:72rem;
-    width:25rem;
-    height:25rem;
-  }
-
-  #example canvas {
-    width:100%;
-    height:100%;
-  }
-
-  ul a {
-    padding:0 !important;
-    margin:0;
-  }
-
-</style>
 </head>
-<body>
+
   <div id="app"></div>
-  <div id="example">
-    <canvas></canvas>
-  </div>
+  <canvas width=300 height=300></canvas>
 
   <!-- Docsify v4 -->
   <script src='https://cdn.jsdelivr.net/gh/charlieroberts/screamer@latest/screamer-lang.min.js'></script>
@@ -61,12 +28,26 @@
 
     const prefix = `camera=(0 0 5) fog = (0 0 0 0) post = () background = (0 0 0 ) render = high`
     window.$docsify = {
+      el:'#app',
       name: '',
       repo: '',
+      topMargin:300,
+      headerHeight:300,
       plugins: [
         function( hook, vm ) {
           hook.doneEach(function () {
             const targetElms = Array.from(document.querySelectorAll('pre[data-lang]'))
+
+            
+            const header = document.querySelector('main')
+            const span = document.createElement('span')
+            span.classList.add( 'canvasspan' )
+            span.append( document.querySelector( 'canvas' ) )
+            const h1 = document.createElement('h1')
+            h1.innerText = 'Screamer'
+            span.appendChild( h1 )
+            header.prepend( span )
+            
 
             const template = `<button class="run">Run Code</span></button>`
             
@@ -87,6 +68,8 @@
               btn.innerText = 'run'
               elm.parentElement.parentElement.appendChild( btn )
             })
+
+            screamer.run( `render=repeat.low fog=(.1,0,0,0) camera=(0,0,time*-.25) sphere'.25 # 1`)
             
           })
         }

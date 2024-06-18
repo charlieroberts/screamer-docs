@@ -1,5 +1,3 @@
-# Screamer
-
 ## Configuration
 
 ### background
