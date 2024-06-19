@@ -37,7 +37,7 @@
         function( hook, vm ) {
           hook.doneEach(function () {
             const targetElms = Array.from(document.querySelectorAll('pre[data-lang]'))
-
+            let sidebarOpen = true
             
             const header = document.querySelector('main')
             const span = document.createElement('span')
@@ -68,6 +68,18 @@
               btn.innerText = 'run'
               elm.parentElement.parentElement.appendChild( btn )
             })
+
+            document.querySelector('.sidebar-toggle').addEventListener('click', e => {
+              sidebarOpen = !sidebarOpen
+              if( sidebarOpen ) {
+                span.classList.add( 'open' )
+                span.classList.remove( 'close' )
+              }else{
+                span.classList.add( 'close' )
+                span.classList.remove( 'open' )
+              }
+              
+            }) 
 
             screamer.run( `render = fractal.med [octahedron(.1) 4 >.1+i*.125 | @sin(time/8)*20*i^i ||(.0002)] @time*30`)
             

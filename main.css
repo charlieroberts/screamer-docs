@@ -71,6 +71,20 @@ h1 {
   height:calc(100% - 300px); 
 }
 
+.open {
+  transform: translateX(var(--sidebar-width));
+}
+.close{
+  transform: translateX(0);
+}
+
+@media( max-width:767px ) {
+  .canvasspan{ 
+    left:0;
+    transform: translateX(0)
+  }
+}
+
 @media (max-width: 425px) {
   .canvasspan {
     left:0;
