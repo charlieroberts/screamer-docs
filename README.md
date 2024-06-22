@@ -120,6 +120,26 @@ sphere # 3
 ```
 <!-- tabs:end -->
 
+### voxel 
+Defaults to .1. When a voxel [render preset](#render) (`voxel.low`, `voxel.med`, or `voxel.high`) is used, this value determines the size of the voxels. The algorithm used to voxelize the geometries gets more expensive as this value decreases, so be careful not to choose values that are super small, for example, a value of .001 might grind your graphics card to a halt.
+
+<!-- tabs:start -->
+#### **big blocks**
+```clike
+render = voxel.low
+voxel = .2
+sphere::rainbow
+```
+
+#### **little blocks**
+```clike
+render = voxel.low
+voxel = .01
+fog = .5
+sphere(.1)::rainbow #.4 
+```
+<!-- tabs:end -->
+
 ## Geometries
 Most of the geometries available in screamer are very simple; the fun comes in repeating, combining, and warping them in different ways. However, there is a also a selection of fractals that can create more complex scenes with very little code.
 
