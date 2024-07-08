@@ -553,7 +553,7 @@ box:red ~time%3
 Apply a color preset. Colors include `red`, `green`, `blue`, `cyan`, `magenta`, `yellow`, `white`, `black`, `grey`.
 
 ### `::` (texture) 
-Apply texture preset. Textures include `rainbow`, `stripes`, `dots`, `truchet`, `noise`, `cellular`, `zigzag`, and `voronoi`. Example: `box::truchet`. All textures also have two optional parameters: *scale*, which determines the scaling of procedural textures, and *uv* which is a three-item list that specifies offsets to look up texture values. Example: `box::rainbow( 10, (sin(time),0,.5))`
+Apply texture preset. Textures include `rainbow`, `stripes`, `dots`, `truchet`, `noise`, `cellular`, `zigzag`, `voronoi`, and `hydra`. Example: `box::truchet`. All textures also have two optional parameters: *scale*, which determines the scaling of procedural textures, and *uv* which is a three-item list that specifies offsets to look up texture values. Example: `box::rainbow( 10, (sin(time),0,.5))`
 
 
 ## Variables
@@ -629,5 +629,20 @@ render = fractal.high
 [octahedron(.1) 4 >.1+i*.125 | @sin(time/8)*20*i^i ||(.0002)] @time*30
 ```
 
+<!-- tabs:end -->
+
+### Hydra
+This lets you define a texture using the [hydra live coding language](https://hydra.ojack.xyz). This texture can be live coded and changed without having to recompile the main shaders used by screamer; just re-run the hydra block of code and the texture will be updated automatically. You can use whitespace between the opening and closing hydra backticks however you like. All the code between the backticks is JavaScript.
+ 
+<!-- tabs:start -->
+
+#### **better open**
+```clike
+hydra`
+  osc(15,.1,5).modulate( noise(50) ).out()
+`
+
+sphere(1.5)::hydra
+```
 <!-- tabs:end -->
 
