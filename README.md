@@ -553,8 +553,10 @@ box:red ~time%3
 Apply a color preset. Colors include `red`, `green`, `blue`, `cyan`, `magenta`, `yellow`, `white`, `black`, `grey`.
 
 ### `::` (texture) 
-Apply texture preset. Textures include `rainbow`, `stripes`, `dots`, `truchet`, `noise`, `cellular`, `zigzag`, `voronoi`, and `hydra`. Example: `box::truchet`. All textures also have two optional parameters: *scale*, which determines the scaling of procedural textures, and *uv* which is a three-item list that specifies offsets to look up texture values. Example: `box::rainbow( 10, (sin(time),0,.5))`
+Apply texture preset. Textures include `rainbow`, `stripes`, `dots`, `truchet`, `noise`, `cellular`, `zigzag`, `voronoi`, and `hydra`. Example: `box::truchet`. All textures also have two optional parameters: *scale*, which determines the scaling of procedural textures, and *uv offset* which is a three-item list that specifies offsets to look up texture values. Example: `box::rainbow( 10, (sin(time),0,.5))`
 
+### `:::` (bump)
+Apply a texture preset and also use it for bump mapping (more properly known as displacement mapping in this context). The same textures used with `::` can be applied here, however, the first argument for bump is the *amount* of displacement, while the second is *scale* and the third is *uv offset.* This operator can easily glitch out when high amounts are used, however, this is also somewhat dependent on the texture preset that is applied. Typically amount values lower than < .1 should be safe, but higher values can be used with certain presets and scalings.
 
 ## Variables
 
