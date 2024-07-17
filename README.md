@@ -608,7 +608,7 @@ sphere( fade( 300, 0, 2 ) )
 
 ### **focusing**
 ```clike
-post = blur( fade( 300, 50, 0 ) )
+post = ( blur( fade( 300, 50, 0 ) ) )
 sphere( 1.5 )
 ```
 <!-- tabs:end -->
