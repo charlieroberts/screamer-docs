@@ -77,7 +77,7 @@ sphere( high )
 
 
 ### post
- A list of post-processing effects to apply. Available effects include `antialias`, `focus`, `edge`, `invert`, `bloom`, `godrays`, and `blur`. These effects cannot (currently) be animated over time.
+ A list of post-processing effects to apply. Available effects include `antialias`, `focus`, `edge`, `invert`, `bloom`, `godrays`, 'hue', 'brightness', 'contrast', 'glow', and `blur`. Some parameters of these effects can be animated over time.
 
 <!-- tabs:start -->
 #### **edgy**
@@ -597,8 +597,23 @@ High frequency analysis of audio input mapped to 0--1. Example: `box@(high*90, l
 ### i 
 A special variable only used in loops that equals the current loop iteration number, starting at 0. See [the section on loop](#loop) for more information.
 
+### fade
+A variable that linearly fades from one value to another over time. `fade` accepts three arguments: the number of frames of video the fade should occur over, a starting value for the fade, and a target ending value. All three arguments expect static (unchanging) numeric arugments.
+
+<!-- tabs:start -->
+### **fade in**
+```clike
+sphere( fade( 300, 0, 2 ) )
+```
+
+### **focusing**
+```clike
+post = blur( fade( 300, 50, 0 ) )
+sphere( 1.5 )
+```
+<!-- tabs:end -->
+
 ## Math
-Note: traditional parenthesis `()` do not currently work in math expressions, as they're currently used by the language to group combinators, geometries, and modifiers together... this is a todo to fix.
 
 - `+` Addition. Adds two numbers/variables together.
 - `-` Subtraction. Subtracts two numbers/variables together.
@@ -613,6 +628,7 @@ Note: traditional parenthesis `()` do not currently work in math expressions, as
 - *floor*: Rounds down a number.
 - *ceil*: Rounds up a number.
 - *abs*: Gets the absolute value for a number.
+
 
 ## Misc
 ### Loop
@@ -648,3 +664,162 @@ sphere(1.5)::hydra
 ```
 <!-- tabs:end -->
 
+## Post-Processing FX
+Post-processing fx are (almost) always applied to the entire rendered scene. They can quickly and easily provide a lot of variation and visual interest. The effects are created using the [merge-pass](https://github.com/bandaloo/merge-pass) JavaScript library. These fx are added to the scene using the [`post`](#post) config.
+
+### bloom
+Brighten and blur pixels above a given threshold value. This effect is typically used to mimic the appearance of light reflecting directly into a camera, but can also be used for other artistic purposes. The input arguments are *brightness threshold*, *amount*, *horizontal blur*, and *vertical blur*.
+
+<!-- tabs:start -->
+#### **so shiny**
+
+```clike
+post = ( bloom( .5 1.3 3 3 ) )
+mandelbox:white'.35 @y time*20
+```
+<!-- tabs:end -->
+
+### blur
+Blur the scene by an argument number of pixels.
+
+<!-- tabs:start -->
+#### **move left, move right**
+
+```clike
+post = ( blur( 50 * mousex ) )
+sphere
+```
+<!-- tabs:end -->
+
+### brightness
+Brighten the scene by increasing the RGB values of every pixel.
+
+<!-- tabs:start -->
+#### **rainbow brite**
+
+```clike
+post = ( brightness( mousex ) )
+box::rainbow(10) '1.25
+```
+<!-- tabs:end -->
+
+### contrast
+Adjust the contrast of the scene..
+
+<!-- tabs:start -->
+#### **move left, move right**
+
+```clike
+post = ( contrast( mousex * 3 ) )
+mandelbox '.35
+```
+<!-- tabs:end -->
+
+### edge 
+Apply a sobel filter that highlights the edges in a 3D scene.
+
+<!-- tabs:start -->
+#### **edgy**
+
+```clike
+post = ( edge invert(1) )
+box @yx time*20
+```
+<!-- tabs:end -->
+
+### focus 
+A depth-of-field filter that blurs objects that are not currently focused. It accepts two arguments: *depth* determines where on the z-axis from the camera the focus is, and *radius* determines how much depth is in focus..
+
+<!-- tabs:start -->
+#### **blurry boxes**
+
+```clike
+render = repeat.med
+post = ( focus( sinn( time )*.5, .005 ) )
+fog = .1
+box'.25 #1
+```
+<!-- tabs:end -->
+
+### glow 
+Make the scene blurry and glowy.
+
+<!-- tabs:start -->
+#### **holy julia**
+
+```clike
+render = repeat.med
+post = ( focus( sinn( time )*.5, .005 ) )
+fog = .1
+box'.25 #1
+```
+<!-- tabs:end -->
+
+### godrays 
+Volumetric lighting. Arguments:
+- *decay*: How much the light decays over space. Slightly positive values (e.g. 1.01) create feedback that can create stronger beams. 
+- *weight*: don't know how to describe this one.
+- *density*: controls how far the beams extend.
+- *threshold*: controls the starting point of the beams on the z-axis
+
+<!-- tabs:start -->
+#### **slits**
+
+```clike
+post = ( godrays(.975 .05 1 1 ) )
+b = box((4 4 .05)) -- (box((.15 .5 .1)):white #x .8+sin(time)*.3)
+b -- sphere(.5)
+```
+
+#### **neato**
+```clike
+post = ( godrays(.99 .0125 1 .75 ) )
+fog = (.2 .125 0 .125)
+background = (.125 0 .125)
+render = fractal.med
+ 
+s = sphere(2):purple 
+s = s ** mandelbox(.3 + cos(time/2) * .1, 2.4+sin(time)*.15 ):red
+s @time*20
+```
+<!-- tabs:end -->
+
+### hue 
+Shift the color spectrum of the scene. Arguments are: *shift* the amount to shift, from 0-1, and *threshold*, which determines where in the depth field the effect takes place. A value of `0` in threshold means that nothing will be affected, while a value of `.99` means that everything *except* the background will be affected. A value of `1` affects the background as well. Negative values may need to be used when using repeated field or other elements close to the camera.
+
+<!-- tabs:start -->
+#### **shifty rainbows**
+
+```clike
+post = ( hue( sin(time/3) sin(time) * .75 ) )
+render = repeat.low
+box::rainbow'.25 # 1
+```
+<!-- tabs:end -->
+
+### invert 
+Invert the color spectrum of the scene. The one argument is *threshold*, which determines where in the depth field the effect takes place. A value of `0` in threshold means that nothing will be affected, while a value of `.99` means that everything *except* the background will be affected. A value of `1` affects the background as well. Negative values may need to be used when using repeated field or other elements close to the camera. Tying the threshold to audio can create dramatic effects.
+
+<!-- tabs:start -->
+#### **audio flips**
+
+```clike
+post = ( invert( -.75 - (low *-.85) ) focus )
+render = repeat.med
+(box::rainbow'.25 # 1) @z time*5
+```
+<!-- tabs:end -->
+
+### motionblur 
+Create a blurred trail for moving objects. The effect accepts one argument, *amount*, which determines the strength of the blur and defaults to `.7`.
+<!-- tabs:start -->
+#### **harmonograph**
+
+```clike
+post = ( motionblur(.8) )
+render = high
+s = sphere(.5):white::dots(10) 
+s >x sin(time*4)*2 
+s >y cos(time*2)*2
+```
+<!-- tabs:end -->
