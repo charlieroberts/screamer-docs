@@ -75,6 +75,30 @@ sphere( high )
 
 <!-- tabs:end -->
 
+### lighting
+OK, this one is a bit confusing. Screamer has a default global lighting scheme that affects every object in the scene equally (you can use fog to decrease the lighting over distance). However, you can also use custom colors with the `:color(r,g,b)` operator with the `lighting` config to use a different lighting scheme (phong shading).
+
+The parameters for the `light` function are:
+- *list* xyz position
+- *list* rgb color
+- *float* attenuation, this controls how the light fades over distance 
+
+<!-- tabs:start -->
+#### **left red right blue**
+```clike
+lighting = ( light( (-2,0,0) (1 0 0) ), light( (2,0,0) (0 0 1) ) )
+box:color( 1 1 1 )@time*20 ++ plane:color( 1 1 1)
+```
+
+#### **repeat no fog**
+```clike
+// note the different attentuations for left/right
+lighting = ( light( (-2,0,0) (1 0 0) .1 ), light( (2,0,0) (1 1 1) 1.5 ) )
+sphere(.1):color(0 1 0) # .5
+```
+<!-- tabs:end -->
+
+
 
 ### post
  A list of post-processing effects to apply. Available effects include `antialias`, `focus`, `edge`, `invert`, `bloom`, `godrays`, 'hue', 'brightness', 'contrast', 'glow', and `blur`. Some parameters of these effects can be animated over time.
@@ -550,7 +574,21 @@ box:red ~time%3
 <!-- tabs:end -->
 
 ### `:` (color) 
-Apply a color preset. Colors include `red`, `green`, `blue`, `cyan`, `magenta`, `yellow`, `white`, `black`, `grey`.
+Apply a color preset or custom color. Colors include `red`, `green`, `blue`, `cyan`, `magenta`, `yellow`, `white`, `black`, `grey`. To create a custom color, use `:color(r,g,b)` where the rgb values are typically between 0-1 (you can go higher if you want). When custom colors are used, the object will be lit using a different lighting scheme than the regular global lighting.
+
+<!-- tabs:start -->
+### **red global**
+```clike
+box:red @time*20
+```
+### **red custom**
+```clike
+lighting = ( light( (2 0 5) ( 0 0 1) .1 ) light( ( -2, 0, -2) (1 1 1) .1 ) )
+box:color(1 0 0) @time*20
+```
+
+<!-- tabs:end -->
+
 
 ### `::` (texture) 
 Apply texture preset. Textures include `rainbow`, `stripes`, `dots`, `truchet`, `noise`, `cellular`, `zigzag`, `voronoi`, and `hydra`. Example: `box::truchet`. All textures also have two optional parameters: *scale*, which determines the scaling of procedural textures, and *uv offset* which is a three-item list that specifies offsets to look up texture values. Example: `box::rainbow( 10, (sin(time),0,.5))`
