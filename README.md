@@ -591,7 +591,7 @@ box:color(1 0 0) @time*20
 
 
 ### `::` (texture) 
-Apply texture preset. Textures include `rainbow`, `stripes`, `dots`, `truchet`, `noise`, `cellular`, `zigzag`, `voronoi`, and `hydra`. Example: `box::truchet`. All textures also have two optional parameters: *scale*, which determines the scaling of procedural textures, and *uv offset* which is a three-item list that specifies offsets to look up texture values. Example: `box::rainbow( 10, (sin(time),0,.5))`
+Apply texture preset. Textures include `rainbow`, `stripes`, `dots`, `truchet`, `noise`, `cellular`, `zigzag`, `voronoi`, and `hydra`. Example: `box::truchet`. All textures also have three optional parameters: *scale*, which determines the scaling of procedural textures, *uv offset* which is a three-item list that specifies offsets to look up texture values, and *strength* which determines how strong the texture component is in the final output color. Example: `box::rainbow( 10, (sin(time),0,.5), .5)`
 
 ### `:::` (bump)
 Apply a texture preset and also use it for bump mapping (more properly known as displacement mapping in this context). The same textures used with `::` can be applied here, however, the first argument for bump is the *amount* of displacement, while the second is *scale* and the third is *uv offset.* This operator can easily glitch out when high amounts are used, however, this is also somewhat dependent on the texture preset that is applied. Typically amount values lower than < .1 should be safe, but higher values can be used with certain presets and scalings.
@@ -627,11 +627,33 @@ sphere # mousey * 6
 <!-- tabs:end -->
 
 ### low
-Low frequency analysis of audio input mapped to 0--1. Example: `sphere(low)`
+Low frequency analysis of audio input mapped to 0--1. You can optionally pass
+the function a smoothing argument to make the responsiveness less jerky. Values
+closer to 1 will result in much smoother transitions.
+
+<!-- tabs:start -->
+### **fast response**
+```clike
+sphere( low )
+```
+### **slow response**
+```clike
+sphere( low(.95) )
+```
+<!-- tabs:end -->
+
 ### mid
-Mid frequency analysis of audio input mapped to 0--1. Example: `box(mid)`
+Mid frequency analysis of audio input mapped to 0--1. You can optionally pass
+the function a smoothing argument to make the responsiveness less jerky. Values
+closer to 1 will result in much smoother transitions. See [the section on low](#low)
+for simple examples of controlling the smoothness.
+ 
 ### high
-High frequency analysis of audio input mapped to 0--1. Example: `box@(high*90, low, 0, mid)`
+High frequency analysis of audio input mapped to 0--1. You can optionally pass
+the function a smoothing argument to make the responsiveness less jerky. Values
+closer to 1 will result in much smoother transitions. See [the section on low](#low)
+for simple examples of controlling the smoothness.
+
 ### i 
 A special variable only used in loops that equals the current loop iteration number, starting at 0. See [the section on loop](#loop) for more information.
 
