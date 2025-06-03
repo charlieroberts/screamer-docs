@@ -1,7 +1,7 @@
 ## Configuration
 
-### background
-Assign a RGB list of floats representing a color for the rendering background, e.g. `(1,0,0)` for red or `(0,0,.5)` for dark blue. This configuration cannot be animated over time (although it's on the list!).
+### background / bg
+Assign a RGB list of floats representing a color for the rendering background, e.g. `(1,0,0)` for red or `(0,0,.5)` for dark blue. This configuration cannot be animated over time (although it's on the list!). `bg` is an alternative alias for `background`.
 <!-- tabs:start -->
 
 #### **red**
@@ -11,13 +11,31 @@ sphere
 ```
 #### **black**
 ```clike
-background = (0,0,0)
+bg = (0,0,0)
 sphere
 ```
 
+### foreground / fg
+This assigns a new default color to use for geometries. It also changes the lighting mode from a
+relatively cheap global illumination to a slightly more expensive / nicer looking setup. Using this
+config setting makes it so you don't have to manually specify a `:color()` with each geometry. `fg` is an alternative alias for `foreground`.  
+
+<!-- tabs:start -->
+
+#### **red**
+```clike
+foreground = (1 0 0)
+sphere
+```
+#### **green**
+```clike
+fg = (0,1,0)
+sphere ++ plane
+```
 <!-- tabs:end -->
+
 ### camera
- The xyz coordinates of the camera. Example: `camera = (0,0,3)`. Geometries are placed at the `0,0,0` coordinate by default, so you usally want your camera to be a bit back on the z-axis to properly view them (a z value of 5 is the default. This configuation *can* be animated. 
+Sets the xyz coordinates of the camera. Example: `camera = (0,0,3)`. Geometries are placed at the `0,0,0` coordinate by default, so you usally want your camera to be a bit back on the z-axis to properly view them (a z value of 5 is the default. This configuation *can* be animated. Note that if you move your camera with keyboard shortcuts, the only way to restore the camera to the original position is if you set this configuration value. 
 
 <!-- tabs:start -->
 
