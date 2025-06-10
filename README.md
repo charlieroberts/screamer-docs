@@ -14,6 +14,7 @@ sphere
 bg = (0,0,0)
 sphere
 ```
+<!-- tabs:end -->
 
 ### foreground / fg
 This assigns a new default color to use for geometries. It also changes the lighting mode from a
@@ -181,6 +182,26 @@ fog = .5
 sphere(.1)::rainbow #.4 
 ```
 <!-- tabs:end -->
+
+### zoom 
+There are a lot of factors that determine the computational cost of raymarchers; many of these are controlled using the [render config](#render). But the most important one is how big a canvas you're rendering to. The `zoom` config lets you control this. A value of `.1` will set the canvas to be 1/10th of the window size; the browser will then use interpolation so that this smaller canvas still fills the whole screen. Conversely, a value of `2` might be appropriate for a hidpi/retina display that is driven by a fast GPU. 
+
+<!-- tabs:start -->
+#### **low resolution**
+```clike
+render = repeat.high
+zoom = .1
+(sphere(.1) # .6) >z time/4
+```
+
+#### **full resolution**
+```clike
+render = repeat.high
+zoom = 1
+(sphere(.1) # .6) >z time/4
+```
+<!-- tabs:end -->
+
 
 ## Geometries
 Most of the geometries available in screamer are very simple; the fun comes in repeating, combining, and warping them in different ways. However, there is a also a selection of fractals that can create more complex scenes with very little code.
@@ -423,18 +444,46 @@ box ++++(.5 10) sphere
 ```
 <!-- tabs:end -->
 
+### `+++++` (chamfered union) 
+Adds two geometries and creates a 45 degree transition, with argument transition size.. 
+
+### `++++++` (rounded stairs union) 
+Adds two geometries and creates a rounded stepped transition, with argument transition size and number of steps. 
+<!-- tabs:start -->
+#### **simple**
+```clike
+box ++++++(.35,3) sphere(1.2)
+```
+
+#### **lotsa steps**
+```clike
+box ++++++(.5 10) sphere
+```
+<!-- tabs:end -->
+
+
 ### `--` (difference)
  Subtracts two geometries. Example: `box -- sphere(1.2)`
 ### `---` (round difference)
  Subtracts two geometries and creates a smooth transition between them, with an argument smoothing coefficient. Example:`box ---(.75) sphere(1.2)`.
 ### `----` (stairs difference)
  Subtracts two geometries and creates a stepped transition, with argument transition size and number of steps. Example:`box ----(.35,6) sphere(1.2)`
+### `-----` (chamfered difference)
+ Subtracts two geometries and creates a 45 degree transition, with argument transition size. Example:`box -----(.35) sphere(1.2)`
+### `------` (round stairs difference)
+ Subtracts two geometries and creates a stepped transition, with argument transition size and number of steps. Example:`box ------(.35,6) sphere(1.2)`
+
 ### `**` (intersection)
  Creates the intersection of two geometries. Example: `box *** sphere(1.2)`
 ### `***` (round intersection)
 Intersects two geometries and creates a smooth transition between them, with an argument smoothing coefficient. Example:`box ***(.75) sphere(1.2)`.
 ### `****` (stairs intersection)
  Intersects two geometries and creates a stepped transition, with argument transition size and number of steps. Example:`box ****(.35,6) sphere(1.2)`
+### `*****` (chamfered intersection)
+Intersects two geometries and creates a 45 degree transition, with argument transition size. Example:`box *****(.35) sphere(1.2)`
+### `*****` (round stairs intersection)
+Intersects two geometries and creates a rounded stepped transition, with argument transition size and number of steps. Example:`box ******(.35) sphere(1.2)`
+
 
 ## Modifiers
 Modifiers are (mostly) single-character operators to modify the geometry, combinator, or modifier to their left. The `@`Rotate, `>`Translate, `#`Repeat, `|`Mirror, and `||`SmoothMirror operators can be used with `xyz` *decorators* to specify which dimensions the operator will be applied to. For example, `box >x .5` will only translate on the x axis, while `sphere #yz 2` will repeat on the y and z axes. If no decorations are applied, the operation will be applied on all axes by default. 
