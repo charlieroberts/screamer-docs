@@ -665,6 +665,9 @@ Apply a texture preset and also use it for bump mapping (more properly known as 
 
 ## Variables
 
+### osc
+You can use any Open Sound Control address using the syntax `\address`. For example, if you were sending OSC to the address `/test` you could use code such as `sphere( .5 + \test * .5 )` (note the change in the slash direction). Browsers can't speak OSC natively, so you'll need to translate OSC messages to the WebSocket protocol and forward them to the browser. There is a [small server](https://codeberg.org/charlieroberts/screamer.oscserver/) to help with this.
+
 ### time 
 The time since the environment was loaded, measured in seconds.
 <!-- tabs:start -->
