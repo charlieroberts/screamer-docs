@@ -539,6 +539,12 @@ Move along three axes.
 box'.15 >x 1.5
 ```
 
+#### **mirror fun**
+```clike
+(box'.15 >sinn(time*4) |) > 1 |
+```
+<!-- tabs:end -->
+
 ### `>>` (translate texture)
 Move a texture surrounding a geometry. 
 <!-- tabs:start -->
@@ -546,11 +552,6 @@ Move a texture surrounding a geometry.
 ```clike
 b = box(2) ::truchet(30) >>x time*.1
 b@time*15
-```
-
-#### **mirror fun**
-```clike
-(box'.15 >sinn(time*4) |) > 1 |
 ```
 <!-- tabs:end -->
 
